@@ -1,4 +1,13 @@
+#IDE
+.idea
+
+#Modules
+    #Node
+node_modules/
+    #SASS
 .sass-cache/
 *.css.map
 *.sass.map
 *.scss.map
+    #Webpack
+/dist
