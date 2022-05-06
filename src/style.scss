@@ -1,0 +1,59 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0;
+  border: 2px solid red;
+}
+
+.textarea-container__textarea {
+
+}
+
+.keyboard-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.keyboard-container > * {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-rows: 50px;
+  grid-gap: 5px;
+}
+
+.keyboard-container > * > * {
+  text-align: center;
+  border: 1px solid blue;
+}
+
+.keyboard__firstRow {
+  grid-template-columns: repeat(13, 50px) 125px;
+}
+
+.keyboard__secondRow {
+  grid-template-columns: 65px repeat(13, 50px) 55px;
+}
+
+.keyboard__thirdRow {
+  grid-template-columns: 125px repeat(11, 50px) 105px;
+}
+
+.keyboard__fourthRow {
+  grid-template-columns: 125px repeat(13, 50px);
+}
+
+.keyboard__fifthRow {
+  grid-template-columns: 80px repeat(2, 50px) 340px 50px 80px repeat(3, 50px);
+}
