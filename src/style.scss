@@ -13,47 +13,70 @@ body {
 .container {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0;
-  border: 2px solid red;
+  padding: 40px 20px;
+}
+
+.textarea-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .textarea-container__textarea {
-
+  width: 100%;
+  max-width: 1024px;
 }
 
 .keyboard-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  row-gap: 5px;
+  margin-top: 20px;
 }
 
 .keyboard-container > * {
   display: grid;
   grid-auto-flow: column;
   grid-auto-rows: 50px;
-  grid-gap: 5px;
+  grid-column-gap: 5px;
 }
 
 .keyboard-container > * > * {
   text-align: center;
-  border: 1px solid blue;
+  border-radius: 5px;
 }
 
-.keyboard__firstRow {
+.keyboard__first-row {
   grid-template-columns: repeat(13, 50px) 125px;
 }
 
-.keyboard__secondRow {
+.keyboard__second-row {
   grid-template-columns: 65px repeat(13, 50px) 55px;
 }
 
-.keyboard__thirdRow {
+.keyboard__third-row {
   grid-template-columns: 125px repeat(11, 50px) 105px;
 }
 
-.keyboard__fourthRow {
+.keyboard__fourth-row {
   grid-template-columns: 125px repeat(13, 50px);
 }
 
-.keyboard__fifthRow {
+.keyboard__fifth-row {
   grid-template-columns: 80px repeat(2, 50px) 340px 50px 80px repeat(3, 50px);
+}
+
+.symbol-key {
+  color: aliceblue;
+  background-color: #808080;
+}
+
+.special-key {
+  color: aliceblue;
+  background-color: #606060;
+}
+
+.active {
+  background-color: #3366FF;
 }

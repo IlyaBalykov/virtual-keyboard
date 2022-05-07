@@ -1,11 +1,20 @@
 function makeRow(row, rowNumber) {
   const keyArr = [];
   const newRow = document.createElement('div');
+  const reg = /^[\da-zа-яЁё+\-=]$|Tab| /i;
   row.forEach((e, i) => {
     const key = document.createElement('div');
-
+    const keyValue = e[0];
+    const keyId = e[1];
     newRow.className = `keyboard__${rowNumber}`;
-    key.innerText = e;
+    key.innerText = keyValue;
+    if (reg.test(keyValue)) {
+      key.className = 'symbol-key';
+      key.classList.add(`${keyId}`);
+    } else {
+      key.className = 'special-key';
+      key.classList.add(`${keyId}`);
+    }
     key.dataset.keyPosition = `${rowNumber}-${i}`;
     keyArr.push(key);
   });
@@ -15,17 +24,17 @@ function makeRow(row, rowNumber) {
 
 function makeKbd() {
   const keyboardContainer = document.createElement('section');
-  const firstRow = ['ё', 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '-', '=', 'Backspace'];
-  const secondRow = ['Tab', 'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', '\\', 'DEL'];
-  const thirdRow = ['Caps Lock', 'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', 'Enter'];
-  const fourthRow = ['Shift', '\\', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', '/', '^', 'Shift'];
-  const fifthRow = ['Ctl', 'Win', 'Alt', '', 'Alt', 'Ctrl', '<', '^', '>'];
+  const firstRow = [['ё', 'Backquote'], [1, 'Digit1'], [2, 'Digit2'], [3, 'Digit3'], [4, 'Digit4'], [5, 'Digit5'], [6, 'Digit6'], [7, 'Digit7'], [8, 'Digit8'], [9, 'Digit9'], [0, 'Digit0'], ['-', 'Minus'], ['=', 'Equal'], ['Backspace', 'Backspace']];
+  const secondRow = [['Tab', 'Tab'], ['Й', 'KeyQ'], ['Ц', 'KeyW'], ['У', 'KeyE'], ['К', 'KeyR'], ['Е', 'KeyT'], ['Н', 'KeyY'], ['Г', 'KeyU'], ['Ш', 'KeyI'], ['Щ', 'KeyO'], ['З', 'KeyP'], ['Х', 'BracketLeft'], ['Ъ', 'BracketRight'], ['\\', 'Backslash'], ['DEL', 'Delete']];
+  const thirdRow = [['Caps Lock', 'CapsLock'], ['Ф', 'KeyA'], ['Ы', 'KeyS'], ['В', 'KeyD'], ['А', 'KeyF'], ['П', 'KeyG'], ['Р', 'KeyH'], ['О', 'KeyJ'], ['Л', 'KeyK'], ['Д', 'KeyL'], ['Ж', 'Semicolon'], ['Э', 'Quote'], ['Enter', 'Enter']];
+  const fourthRow = [['Shift', 'ShiftLeft'], ['\\', 'Backslash'], ['Я', 'KeyZ'], ['Ч', 'KeyX'], ['С', 'KeyC'], ['М', 'KeyV'], ['И', 'KeyB'], ['Т', 'KeyN'], ['Ь', 'KeyM'], ['Б', 'Comma'], ['Ю', 'Period'], ['/', 'Slash'], ['^', 'ArrowUp'], ['Shift', 'ShiftRight']];
+  const fifthRow = [['Ctl', 'ControlLeft'], ['Win', 'Super'], ['Alt', 'AltLeft'], [' ', 'Space'], ['Alt', 'AltRight'], ['Ctrl', 'ControlRight'], ['<', 'ArrowLeft'], ['^', 'ArrowDown'], ['>', 'ArrowRight']];
 
-  const keyboardRows = [makeRow(firstRow, 'firstRow'),
-    makeRow(secondRow, 'secondRow'),
-    makeRow(thirdRow, 'thirdRow'),
-    makeRow(fourthRow, 'fourthRow'),
-    makeRow(fifthRow, 'fifthRow')];
+  const keyboardRows = [makeRow(firstRow, 'first-row'),
+    makeRow(secondRow, 'second-row'),
+    makeRow(thirdRow, 'third-row'),
+    makeRow(fourthRow, 'fourth-row'),
+    makeRow(fifthRow, 'fifth-row')];
 
   keyboardContainer.className = 'keyboard-container';
   keyboardContainer.append(...keyboardRows);
