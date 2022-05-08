@@ -1,21 +1,26 @@
 import './style.scss';
 import * as textAreaElements from './textArea';
+import Panel from './panel';
 import keyboard from './keyboard';
 
+// Main variables
 const container = document.createElement('div');
-let lang = 'ru';
+let lang = 'RU';
+const statusBar = new Panel(lang);
 
 container.className = 'container';
 
 document.body.append(container);
 container.append(textAreaElements.default);
+container.append(statusBar.makePanel());
 container.append(keyboard);
 
+// Selectors after render
 const symbolKey = document.querySelectorAll('.symbol-key');
 const specialKey = document.querySelectorAll('.special-key');
 const textAreaElement = document.querySelector('.textarea-container__textarea');
 
-function writeToTextArea(event) {
+const writeToTextArea = (event) => {
   event.target.classList.remove('active');
   if (event.shiftKey) {
     textAreaElements.textArea.value += `${event.target.textContent.toUpperCase()}`;
@@ -25,13 +30,16 @@ function writeToTextArea(event) {
   } else {
     textAreaElements.textArea.value += `${event.target.textContent.toLowerCase()}`;
   }
-}
+};
 
 const changeLanguage = () => {
-  if (lang === 'ru') {
-    lang = 'en';
+  const panelContainer = document.querySelector('.panel-container');
+  if (lang === 'RU') {
+    lang = 'EN';
+    panelContainer.replaceWith(new Panel(lang).makePanel());
   } else {
-    lang = 'ru';
+    lang = 'RU';
+    panelContainer.replaceWith(new Panel(lang).makePanel());
   }
 };
 
@@ -82,6 +90,18 @@ specialKey.forEach((e) => {
 document.addEventListener('keydown', (event) => {
   document.querySelectorAll(`.${event.code}`).forEach((e) => {
     e.classList.add('active');
+    switch (event.code) {
+      case 'ArrowUp': textAreaElements.textArea.value += '^';
+        break;
+      case 'ArrowRight': textAreaElements.textArea.value += '>';
+        break;
+      case 'ArrowDown': textAreaElements.textArea.value += '^';
+        break;
+      case 'ArrowLeft': textAreaElements.textArea.value += '<';
+        break;
+      default:
+        break;
+    }
   });
 });
 document.addEventListener('keyup', (event) => {

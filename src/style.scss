@@ -16,6 +16,7 @@ body {
   padding: 40px 20px;
 }
 
+// Textarea
 .textarea-container {
   display: flex;
   flex-direction: column;
@@ -25,8 +26,34 @@ body {
 .textarea-container__textarea {
   width: 100%;
   max-width: 1024px;
+  border: 2px solid #606060;
+  border-radius: 5px 5px 0 5px;
 }
 
+// Statusbar
+.panel-container {
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+  margin-top: 20px;
+  border-radius: 5px;
+  background-color: #808080;
+}
+.panel__lang-block {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+  gap: 5px;
+}
+.panel__lang-block > * {
+  padding: 5px;
+  height: 100%;
+  border-radius: 5px;
+  background-color: #606060;
+  color: aliceblue;
+}
+
+// Keyboard
 .keyboard-container {
   display: flex;
   flex-direction: column;
