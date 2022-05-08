@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+$fontFamily: 'Roboto', sans-serif;
 * {
   box-sizing: border-box;
 }
@@ -26,31 +28,46 @@ body {
 .textarea-container__textarea {
   width: 100%;
   max-width: 1024px;
-  border: 2px solid #606060;
+  border: 2px solid #808080;
   border-radius: 5px 5px 0 5px;
+}
+.textarea-container__textarea:focus {
+  outline: none;
+  border: 2px solid #404040;
 }
 
 // Statusbar
 .panel-container {
   display: flex;
   flex-direction: row;
+  gap: 25px;
   padding: 5px;
   margin-top: 20px;
   border-radius: 5px;
   background-color: #808080;
 }
-.panel__lang-block {
+.panel__block {
   display: flex;
   flex-direction: row;
   width: max-content;
   gap: 5px;
 }
-.panel__lang-block > * {
+.panel__block > * {
   padding: 5px;
   height: 100%;
+  line-height: 100%;
   border-radius: 5px;
   background-color: #606060;
   color: aliceblue;
+}
+.panel__hotkey{
+  width: 100px;
+  text-align: center;
+}
+.panel__current-status {
+  font-family: $fontFamily;
+  width: 55px;
+  text-align: center;
 }
 
 // Keyboard
@@ -72,6 +89,7 @@ body {
 .keyboard-container > * > * {
   text-align: center;
   border-radius: 5px;
+  transition: All .1s ease;
 }
 
 .keyboard__first-row {
@@ -95,15 +113,20 @@ body {
 }
 
 .symbol-key {
+  font-family: $fontFamily;
+  line-height: 50px;
   color: aliceblue;
   background-color: #808080;
 }
 
 .special-key {
+  font-family: $fontFamily;
+  line-height: 50px;
   color: aliceblue;
   background-color: #606060;
 }
 
 .active {
   background-color: #3366FF;
+  transform: translate(2px, 2px);
 }

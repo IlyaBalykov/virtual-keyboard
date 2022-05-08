@@ -6,7 +6,8 @@ import keyboard from './keyboard';
 // Main variables
 const container = document.createElement('div');
 let lang = 'RU';
-const statusBar = new Panel(lang);
+let capsStatus = 'OFF';
+const statusBar = new Panel(lang, capsStatus);
 
 container.className = 'container';
 
@@ -34,13 +35,7 @@ const writeToTextArea = (event) => {
 
 const changeLanguage = () => {
   const panelContainer = document.querySelector('.panel-container');
-  if (lang === 'RU') {
-    lang = 'EN';
-    panelContainer.replaceWith(new Panel(lang).makePanel());
-  } else {
-    lang = 'RU';
-    panelContainer.replaceWith(new Panel(lang).makePanel());
-  }
+  panelContainer.replaceWith(new Panel(lang, capsStatus).makePanel());
 };
 
 const changeTextArea = (event) => {
@@ -60,6 +55,8 @@ const combinationHandler = () => {
     pressedKey.add(event.code);
 
     if (pressedKey.has('ShiftLeft') && pressedKey.has('ControlLeft')) {
+      lang = (lang === 'RU') ? 'EN' : 'RU';
+
       changeLanguage();
       pressedKey.clear();
     }
@@ -87,9 +84,18 @@ specialKey.forEach((e) => {
   });
 });
 
+// Main event listeners
+window.onload = function loadLang() {
+  lang = localStorage.getItem('language');
+  changeLanguage();
+};
+window.onunload = function saveLang() {
+  localStorage.setItem('language', lang);
+};
+
 document.addEventListener('keydown', (event) => {
   document.querySelectorAll(`.${event.code}`).forEach((e) => {
-    e.classList.add('active');
+    if (event.code !== 'CapsLock') e.classList.add('active');
     switch (event.code) {
       case 'ArrowUp': textAreaElements.textArea.value += '^';
         break;
@@ -98,6 +104,8 @@ document.addEventListener('keydown', (event) => {
       case 'ArrowDown': textAreaElements.textArea.value += '^';
         break;
       case 'ArrowLeft': textAreaElements.textArea.value += '<';
+        break;
+      case 'CapsLock': capsStatus = event.getModifierState('CapsLock') ? 'OFF' : 'ON'; changeLanguage();
         break;
       default:
         break;
