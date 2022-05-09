@@ -151,7 +151,9 @@ const combinationHandler = () => {
 combinationHandler();
 
 document.addEventListener('DOMContentLoaded', () => {
-  lang = localStorage.getItem('language');
+  if (localStorage.getItem('language')) {
+    lang = localStorage.getItem('language');
+  }
   changeDOM();
 });
 
