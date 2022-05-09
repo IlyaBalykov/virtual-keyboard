@@ -1,51 +1,135 @@
+import img from './favicon.ico';
 import './style.scss';
 import * as textAreaElements from './textArea';
 import Panel from './panel';
-import keyboard from './keyboard';
+import makeKbd from './keyboard';
 
-// Main variables
-const container = document.createElement('div');
 let lang = 'RU';
 let capsStatus = 'OFF';
+let shiftLeftStatus = 'OFF';
+let shiftRightStatus = 'OFF';
+const favicon = document.createElement('link');
+const container = document.createElement('div');
 const statusBar = new Panel(lang, capsStatus);
 
+favicon.setAttribute('rel', 'icon');
+favicon.setAttribute('href', `${img}`);
 container.className = 'container';
-
+document.head.append(favicon);
 document.body.append(container);
 container.append(textAreaElements.default);
 container.append(statusBar.makePanel());
-container.append(keyboard);
+container.append(makeKbd(lang, shiftLeftStatus, shiftRightStatus, capsStatus));
 
-// Selectors after render
-const symbolKey = document.querySelectorAll('.symbol-key');
-const specialKey = document.querySelectorAll('.special-key');
 const textAreaElement = document.querySelector('.textarea-container__textarea');
 
+textAreaElement.onblur = function areaFocus() {
+  textAreaElement.focus();
+};
+
 const writeToTextArea = (event) => {
-  event.target.classList.remove('active');
-  if (event.shiftKey) {
-    textAreaElements.textArea.value += `${event.target.textContent.toUpperCase()}`;
-  } else if (event.target.textContent === 'Tab') {
-    textAreaElements.textArea.value += '\t';
-    textAreaElements.textArea.focus();
+  const areaValue = textAreaElement.value;
+  const currentPosition = textAreaElement.selectionEnd;
+  const before = areaValue.slice(0, currentPosition);
+  const past = areaValue.slice(currentPosition, areaValue.length);
+  if (event.target.textContent === 'Tab' || event.code === 'Tab') {
+    const tab = '\t';
+    textAreaElement.value = before + tab + past;
   } else {
-    textAreaElements.textArea.value += `${event.target.textContent.toLowerCase()}`;
+    textAreaElement.value = before + event.target.textContent + past;
+  }
+  textAreaElement.setSelectionRange(currentPosition + 1, currentPosition + 1);
+};
+
+const changeDOM = () => {
+  const panelContainer = document.querySelector('.panel-container');
+  const kbdContainer = document.querySelector('.keyboard-container');
+  panelContainer.replaceWith(new Panel(lang, capsStatus).makePanel());
+  kbdContainer.replaceWith(makeKbd(lang, shiftLeftStatus, shiftRightStatus, capsStatus));
+  const shiftLeft = document.querySelector('.ShiftLeft');
+  const shiftRight = document.querySelector('.ShiftRight');
+  const capsLock = document.querySelector('.CapsLock');
+  if (shiftLeftStatus === 'ON') {
+    shiftLeft.classList.add('active');
+  } else {
+    shiftLeft.classList.remove('active');
+  }
+  if (shiftRightStatus === 'ON') {
+    shiftRight.classList.add('active');
+  } else {
+    shiftRight.classList.remove('active');
+  }
+  if (capsStatus === 'ON') {
+    capsLock.classList.add('active');
+  } else {
+    capsLock.classList.remove('active');
   }
 };
 
-const changeLanguage = () => {
-  const panelContainer = document.querySelector('.panel-container');
-  panelContainer.replaceWith(new Panel(lang, capsStatus).makePanel());
-};
-
 const changeTextArea = (event) => {
-  event.target.classList.remove('active');
-  if (event.target.textContent === 'Backspace') {
-    const backSpace = new KeyboardEvent('keydown', {
-      bubbles: true, cancelable: true, key: 'Backspace',
-    });
-    textAreaElement.focus();
-    textAreaElement.dispatchEvent(backSpace);
+  const currentPosition = textAreaElement.selectionEnd;
+  const areaValue = textAreaElement.value;
+  event.target.classList.add('active');
+  if (event.target.classList.contains('ShiftLeft')) {
+    if (shiftLeftStatus === 'OFF') {
+      shiftLeftStatus = 'ON';
+      changeDOM();
+    } else {
+      shiftLeftStatus = 'OFF';
+      changeDOM();
+    }
+  } else if (event.target.classList.contains('ShiftRight')) {
+    if (shiftRightStatus === 'OFF') {
+      shiftRightStatus = 'ON';
+      changeDOM();
+    } else {
+      shiftRightStatus = 'OFF';
+      changeDOM();
+    }
+  } else if (event.target.classList.contains('CapsLock')) {
+    if (capsStatus === 'OFF') {
+      capsStatus = 'ON';
+      changeDOM();
+    } else {
+      capsStatus = 'OFF';
+      changeDOM();
+    }
+  } else if (event.target.classList.contains('Backspace')) {
+    const backSpace = textAreaElement.value;
+    const backSpaceBefore = backSpace.slice(0, currentPosition - 1);
+    const backSpacePast = backSpace.slice(currentPosition, backSpace.length);
+    if (currentPosition !== 0) {
+      textAreaElement.value = backSpaceBefore + backSpacePast;
+      textAreaElement.setSelectionRange(currentPosition - 1, currentPosition - 1);
+    }
+  } else if (event.target.classList.contains('Delete')) {
+    const deleteBefore = areaValue.slice(0, currentPosition);
+    const deletePast = areaValue.slice(currentPosition + 1, areaValue.length);
+    textAreaElement.value = deleteBefore + deletePast;
+    textAreaElement.setSelectionRange(currentPosition, currentPosition);
+  } else if (event.target.classList.contains('Enter')) {
+    const before = areaValue.slice(0, currentPosition);
+    const past = areaValue.slice(currentPosition, areaValue.length);
+    const newStr = '\n';
+    textAreaElements.textArea.value = before + newStr + past;
+  } else if (event.target.classList.contains('ArrowUp')) {
+    const before = areaValue.slice(0, currentPosition);
+    const past = areaValue.slice(currentPosition, areaValue.length);
+    const toInsert = '↑';
+    textAreaElement.value = before + toInsert + past;
+    textAreaElement.setSelectionRange(currentPosition + 1, currentPosition + 1);
+  } else if (event.target.classList.contains('ArrowRight')) {
+    const newPosition = textAreaElement.selectionEnd + 1;
+    textAreaElement.setSelectionRange(newPosition, newPosition);
+  } else if (event.target.classList.contains('ArrowDown')) {
+    const before = areaValue.slice(0, currentPosition);
+    const past = areaValue.slice(currentPosition, areaValue.length);
+    const toInsert = '↓';
+    textAreaElement.value = before + toInsert + past;
+    textAreaElement.setSelectionRange(currentPosition + 1, currentPosition + 1);
+  } else if (event.target.classList.contains('ArrowLeft')) {
+    const newPosition = textAreaElement.selectionEnd - 1;
+    if (newPosition > -1) textAreaElement.setSelectionRange(newPosition, newPosition);
   }
 };
 
@@ -56,8 +140,7 @@ const combinationHandler = () => {
 
     if (pressedKey.has('ShiftLeft') && pressedKey.has('ControlLeft')) {
       lang = (lang === 'RU') ? 'EN' : 'RU';
-
-      changeLanguage();
+      changeDOM();
       pressedKey.clear();
     }
   });
@@ -67,45 +150,47 @@ const combinationHandler = () => {
 };
 combinationHandler();
 
-symbolKey.forEach((e) => {
-  e.addEventListener('mouseup', writeToTextArea);
-});
-symbolKey.forEach((e) => {
-  e.addEventListener('mousedown', (event) => {
-    event.target.classList.add('active');
-  });
-});
-specialKey.forEach((e) => {
-  e.addEventListener('mouseup', changeTextArea);
-});
-specialKey.forEach((e) => {
-  e.addEventListener('mousedown', (event) => {
-    event.target.classList.add('active');
-  });
+document.addEventListener('DOMContentLoaded', () => {
+  lang = localStorage.getItem('language');
+  changeDOM();
 });
 
-// Main event listeners
-window.onload = function loadLang() {
-  lang = localStorage.getItem('language');
-  changeLanguage();
-};
 window.onunload = function saveLang() {
   localStorage.setItem('language', lang);
 };
 
+document.addEventListener('mousedown', (event) => {
+  if (event.target.classList.contains('symbol-key')) {
+    event.target.classList.add('active');
+    writeToTextArea(event);
+  } else if (event.target.classList.contains('special-key')) {
+    changeTextArea(event);
+  }
+});
+
+document.addEventListener('mouseup', (event) => {
+  event.target.classList.remove('active');
+});
+
 document.addEventListener('keydown', (event) => {
-  document.querySelectorAll(`.${event.code}`).forEach((e) => {
-    if (event.code !== 'CapsLock') e.classList.add('active');
+  document.querySelectorAll(`.${event.code}`).forEach((element) => {
+    if (event.code !== 'ShiftLeft') element.classList.add('active');
     switch (event.code) {
-      case 'ArrowUp': textAreaElements.textArea.value += '^';
+      case 'CapsLock':
+        capsStatus = event.getModifierState('CapsLock') ? 'OFF' : 'ON';
+        changeDOM();
         break;
-      case 'ArrowRight': textAreaElements.textArea.value += '>';
+      case 'ShiftLeft':
+        shiftLeftStatus = 'ON';
+        changeDOM();
         break;
-      case 'ArrowDown': textAreaElements.textArea.value += '^';
+      case 'ShiftRight':
+        shiftRightStatus = 'ON';
+        changeDOM();
         break;
-      case 'ArrowLeft': textAreaElements.textArea.value += '<';
-        break;
-      case 'CapsLock': capsStatus = event.getModifierState('CapsLock') ? 'OFF' : 'ON'; changeLanguage();
+      case 'Tab':
+        event.preventDefault();
+        writeToTextArea(event);
         break;
       default:
         break;
@@ -115,6 +200,13 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('keyup', (event) => {
   if (!(event.code === 'CapsLock')) {
     document.querySelectorAll(`.${event.code}`).forEach((e) => {
+      if (event.code === 'ShiftLeft') {
+        shiftLeftStatus = 'OFF';
+        changeDOM();
+      } else if (event.code === 'ShiftRight') {
+        shiftRightStatus = 'OFF';
+        changeDOM();
+      }
       e.classList.remove('active');
     });
   }

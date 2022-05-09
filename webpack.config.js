@@ -23,6 +23,12 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i, //exec - css for connect css files
         use: ['style-loader', 'css-loader', 'sass-loader']
+      },
+      {
+        test: /\.(svg|png|gif|jpg|ico)$/,
+        use: {
+          loader: 'file-loader',
+        }
       }
     ],
   },
