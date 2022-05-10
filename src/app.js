@@ -171,7 +171,9 @@ document.addEventListener('mousedown', (event) => {
 });
 
 document.addEventListener('mouseup', (event) => {
-  event.target.classList.remove('active');
+  if (!event.target.classList.contains('CapsLock') && !event.target.classList.contains('ShiftLeft') && !event.target.classList.contains('ShiftRight')) {
+    event.target.classList.remove('active');
+  }
 });
 
 document.addEventListener('keydown', (event) => {
@@ -200,6 +202,9 @@ document.addEventListener('keydown', (event) => {
   });
 });
 document.addEventListener('keyup', (event) => {
+  if (event.metaKey) {
+    event.preventDefault();
+  }
   if (!(event.code === 'CapsLock')) {
     document.querySelectorAll(`.${event.code}`).forEach((e) => {
       if (event.code === 'ShiftLeft') {

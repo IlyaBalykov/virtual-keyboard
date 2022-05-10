@@ -36,7 +36,7 @@ function makeRow(row, rowNumber, lang, shiftLeftStatus, shiftRightStatus, capsSt
         key.classList.add(`${keySpecialId}`);
       }
     } else {
-      if (shiftLeftStatus === 'OFF' || shiftRightStatus === 'OFF') {
+      if (shiftLeftStatus === 'OFF' && shiftRightStatus === 'OFF') {
         if (capsStatus === 'ON') {
           if (regChar.test(keyValueEn)) {
             keyValueEn = keyValueEn.toUpperCase();
