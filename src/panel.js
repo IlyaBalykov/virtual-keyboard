@@ -7,7 +7,7 @@ export default class Panel {
   makePanel() {
     const capsLock = document.querySelector('.CapsLock');
     const panelContainer = document.createElement('section');
-    const panelArr = [['[Shift+Ctrl]', this.lang], ['[CapsLock]', this.capsStatus], ['Keyboard created in Linux']];
+    const panelArr = [['[LeftShift+LeftCtrl]', this.lang], ['[CapsLock]', this.capsStatus], ['Keyboard created in Linux']];
     panelContainer.className = 'panel-container';
     panelArr.forEach((e, i) => {
       const block = document.createElement('div');

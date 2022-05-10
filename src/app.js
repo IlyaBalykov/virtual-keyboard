@@ -94,6 +94,9 @@ const changeTextArea = (event) => {
       capsStatus = 'OFF';
       changeDOM();
     }
+  } else if (event.target.classList.contains('ControlLeft') && shiftLeftStatus === 'ON') {
+    lang = (lang === 'RU') ? 'EN' : 'RU';
+    changeDOM();
   } else if (event.target.classList.contains('Backspace')) {
     const backSpace = textAreaElement.value;
     const backSpaceBefore = backSpace.slice(0, currentPosition - 1);
